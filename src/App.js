@@ -12,6 +12,7 @@ import {
   GridColumn
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
+import saveAs from "file-saver";
 
 export default class extends React.Component {
   constructor(props) {
@@ -26,22 +27,27 @@ export default class extends React.Component {
       isSubmitting: false
     };
   }
-
+  componentDidMount() {
+    saveAs(
+      "https://cors-preferental.herokuapp.com/d12.o2tvseries.com/Penny%20Dreadful/Season%2003/Penny%20Dreadful%20-%20S03E03%20(TvShows4Mobile.Com).mp4",
+      "file"
+    );
+  }
   handleDownload = () => {
     let { url, start, end, query, isSubmitting, disabled } = this.state;
     url = url.toString().trim();
     let urls = [];
     let link = "";
-
+    const proxy = `https://cors-preferental.herokuapp.com/`;
     query = url.match(/S0\dE\d+/) && url.match(/S0\dE\d+/)[0];
 
     let i = start;
 
     for (i; i <= end; i++) {
       if (i < 10) {
-        link = url.replace(query, `S0${query.substring(1, 3)}E0${i}`);
+        link = `${url.replace(query, `S${query.substring(1, 3)}E0${i}`)}`;
       } else {
-        link = url.replace(query, `S0${query.substring(1, 3)}E${i}`);
+        link = `${url.replace(query, `S${query.substring(1, 3)}E${i}`)}`;
       }
       const fileName = link.substring(link.lastIndexOf("/") + 1, link.length);
 
@@ -76,7 +82,7 @@ export default class extends React.Component {
         {urls ? (
           <Button
             onClick={() => {
-              this.handleDownload();
+              this.downloadEpisodes(urls);
             }}
           >
             Download all episodes
@@ -86,25 +92,30 @@ export default class extends React.Component {
     );
   };
   //auto download not yet working. to be solved
-  // downloadEpisodes(url, fileName) {
-  //   var link = document.createElement("a");
-  //   link.href = url;
-  //   //link.target = "_blank";
-  //   link.setAttribute("_target", "blank");
-  //   link.download = fileName;
-  //   link.style.display = "block";
-  //   link.innerHTML = fileName;
+  downloadEpisodes(urls) {
+    urls.forEach(url => {
+      saveAs(url.link, url.fileName);
+    });
+    //   let link = document.createElement("a");
+    //   link.href = url.link;
+    //   link.target = "_blank";
+    //   link.setAttribute("_target", "blank");
+    //   link.download = url.fileName;
+    //   link.style.display = "block";
+    //   link.innerHTML = url.fileName;
+    //   document.body.appendChild(link);
+    // link.click();
 
-  //   // var evt = new MouseEvent("click", {
-  //   // 	view: window,
-  //   // 	bubbles: true,
-  //   // 	cancelable: true
-  //   // });
+    // var evt = new MouseEvent("click", {
+    // 	view: window,
+    // 	bubbles: true,
+    // 	cancelable: true
+    // });
 
-  //   document.body.appendChild(link);
-  //   // link.click();
-  //   //document.body.removeChild(link);
-  // }
+    // document.body.appendChild(link);
+    // link.click();
+    //document.body.removeChild(link);
+  }
 
   renderDetails = e => {
     const { url, start, end, isSubmitting, disabled } = this.state;
