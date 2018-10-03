@@ -89,18 +89,17 @@ export default class extends React.Component {
   //auto download not yet working. to be solved
   downloadEpisodes(urls) {
     urls.forEach(url => {
-      saveAs(url.link, url.fileName);
+      // saveAs(url.link, url.fileName);
+      let link = document.createElement("a");
+      link.href = url.link;
+      link.target = "_blank";
+      link.setAttribute("_target", "blank");
+      link.download = url.fileName;
+      link.style.display = "block";
+      link.innerHTML = url.fileName;
+      document.body.appendChild(link);
+      link.click();
     });
-    //   let link = document.createElement("a");
-    //   link.href = url.link;
-    //   link.target = "_blank";
-    //   link.setAttribute("_target", "blank");
-    //   link.download = url.fileName;
-    //   link.style.display = "block";
-    //   link.innerHTML = url.fileName;
-    //   document.body.appendChild(link);
-    // link.click();
-
     // var evt = new MouseEvent("click", {
     // 	view: window,
     // 	bubbles: true,
