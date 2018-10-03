@@ -1,5 +1,5 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import logo from "./logo.jpg";
 import {
   Container,
   Form,
@@ -12,7 +12,7 @@ import {
   GridColumn
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import logo from "./logo.jpg";
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
@@ -22,29 +22,34 @@ export default class extends React.Component {
       start: undefined,
       end: undefined,
       query: undefined,
-      season: undefined,
       disabled: true,
       isSubmitting: false
     };
   }
 
   handleDownload = () => {
-    let { url, start, end, query, isSubmitting, disabled, season } = this.state;
+    let { url, start, end, query, isSubmitting, disabled } = this.state;
     url = url.toString().trim();
+    let urls = [];
+    let link = "";
 
-    query = url.match(/S0\dE\d+/);
+    query = url.match(/S0\dE\d+/) && url.match(/S0\dE\d+/)[0];
 
     let i = start;
-    let urls = [];
 
-    for (i; i < end; i++) {
-      const fileName = url.substring(url.lastIndexOf("/") + 1, url.length);
-      const link = url.replace(query, `S0${season}E0${i}`);
-      console.log(link);
+    for (i; i <= end; i++) {
+      if (i < 10) {
+        link = url.replace(query, `S0${query.substring(1, 3)}E0${i}`);
+      } else {
+        link = url.replace(query, `S0${query.substring(1, 3)}E${i}`);
+      }
+      const fileName = link.substring(link.lastIndexOf("/") + 1, link.length);
+
       urls.push({ fileName, link });
     }
 
     this.setState({ urls });
+    console.log(urls);
   };
 
   renderUrls = () => {
@@ -59,11 +64,24 @@ export default class extends React.Component {
                 <List.Item
                   icon="linkify"
                   key={fileName}
-                  content={<a href={link}>{fileName}</a>}
+                  content={
+                    <a target="_blank" href={link}>
+                      {fileName}
+                    </a>
+                  }
                 />
               );
             })
           : null}
+        {urls ? (
+          <Button
+            onClick={() => {
+              this.handleDownload();
+            }}
+          >
+            Download all episodes
+          </Button>
+        ) : null}
       </List>
     );
   };
@@ -89,7 +107,7 @@ export default class extends React.Component {
   // }
 
   renderDetails = e => {
-    const { url, start, end, isSubmitting, disabled, season } = this.state;
+    const { url, start, end, isSubmitting, disabled } = this.state;
     return (
       <Container text style={{ marginTop: "100 auto" }}>
         <Header as="h1">Series Download</Header>
@@ -106,12 +124,6 @@ export default class extends React.Component {
                   type="text"
                   onChange={e => this.setState({ url: e.target.value })}
                   placeholder="enter url for one of the episodes here"
-                />
-                <Form.Input
-                  label="enter the season?"
-                  type="number"
-                  onChange={e => this.setState({ season: e.target.value })}
-                  placeholder="e.g 2"
                 />
                 <Form.Input
                   label="start from episode?"
@@ -131,7 +143,7 @@ export default class extends React.Component {
                   onClick={() => {
                     this.handleDownload();
                   }}
-                  disabled={url && start && end && season ? false : true}
+                  disabled={url && start && end ? false : true}
                 >
                   Download
                 </Button>
