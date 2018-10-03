@@ -18,23 +18,22 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/israeladura/series-download.git"
-    },
-    "keywords": [
-      "series",
-      "download",
-      "episode",
-      "movie",
-      "02tvseries",
-      "toxicwap"
-    ],
-    "author": "israeladura",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/israeladura/series-download/issues"
-    },
-    "homepage": "https://github.com/israeladura/series-download#readme"
-  }
-
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/israeladura/series-download.git"
+  },
+  "keywords": [
+    "series",
+    "download",
+    "episode",
+    "movie",
+    "02tvseries",
+    "toxicwap"
+  ],
+  "author": "israeladura",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/israeladura/series-downloader/issues"
+  },
+  "homepage": "https://github.com/israeladura/series-download#readme"
+}
