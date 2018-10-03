@@ -27,14 +27,9 @@ export default class extends React.Component {
       isSubmitting: false
     };
   }
-  componentDidMount() {
-    saveAs(
-      "https://cors-preferental.herokuapp.com/d12.o2tvseries.com/Penny%20Dreadful/Season%2003/Penny%20Dreadful%20-%20S03E03%20(TvShows4Mobile.Com).mp4",
-      "file"
-    );
-  }
+
   handleDownload = () => {
-    let { url, start, end, query, isSubmitting, disabled } = this.state;
+    let { url, start, end, query } = this.state;
     url = url.toString().trim();
     let urls = [];
     let link = "";
