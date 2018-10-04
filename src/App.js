@@ -7,9 +7,7 @@ import {
   Header,
   Grid,
   List,
-  Segment,
-  Image,
-  GridColumn
+  Image
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
@@ -21,7 +19,6 @@ export default class extends React.Component {
       urls: undefined,
       start: undefined,
       end: undefined,
-      query: undefined,
       disabled: true,
       isSubmitting: false,
       errors: []
@@ -29,10 +26,13 @@ export default class extends React.Component {
   }
 
   handleDownload = () => {
-    let { url, start, end, query } = this.state;
+    let { url, start, end } = this.state;
     url = url.toString().trim();
-    let urls = [];
-    let link = "";
+
+    let link = "",
+      urls = [],
+      query = "";
+
     query = url.match(/S(\d+)E(\d+)/) && url.match(/S(\d+)E(\d+)/)[0];
 
     let i = start;
@@ -63,7 +63,7 @@ export default class extends React.Component {
                   icon="linkify"
                   key={fileName}
                   content={
-                    <a target="_blank" href={link}>
+                    <a target="_blank" href={`${link}`}>
                       {fileName}
                     </a>
                   }
@@ -121,7 +121,7 @@ export default class extends React.Component {
   }
 
   renderDetails = e => {
-    const { url, start, end, isSubmitting, disabled } = this.state;
+    const { url, start, end } = this.state;
     return (
       <Container style={{ marginTop: "100 auto" }}>
         <Header as="h1">Series Download</Header>
