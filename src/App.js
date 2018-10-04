@@ -91,6 +91,13 @@ export default class extends React.Component {
   //auto download not yet working. //TODO
   downloadEpisodes(urls) {
     urls.forEach(url => {
+      let link = document.createElement("a");
+      link.href = url.link;
+      link.setAttribute("_target", "blank");
+      link.download = url.fileName;
+      link.style.display = "none";
+      link.innerHTML = url.fileName;
+      document.body.appendChild(link);
       window.open(url.link);
     });
 
