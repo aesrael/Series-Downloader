@@ -12,7 +12,6 @@ import {
   GridColumn
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import saveAs from "file-saver";
 
 export default class extends React.Component {
   constructor(props) {
@@ -24,7 +23,8 @@ export default class extends React.Component {
       end: undefined,
       query: undefined,
       disabled: true,
-      isSubmitting: false
+      isSubmitting: false,
+      errors: []
     };
   }
 
@@ -33,32 +33,29 @@ export default class extends React.Component {
     url = url.toString().trim();
     let urls = [];
     let link = "";
-    const proxy = `https://cors-preferental.herokuapp.com/`;
     query = url.match(/S0\dE\d+/) && url.match(/S0\dE\d+/)[0];
 
     let i = start;
+    if (query) {
+      for (i; i <= end; i++) {
+        if (i < 10) {
+          link = `${url.replace(query, `S${query.substring(1, 3)}E0${i}`)}`;
+        } else {
+          link = `${url.replace(query, `S${query.substring(1, 3)}E${i}`)}`;
+        }
+        const fileName = link.substring(link.lastIndexOf("/") + 1, link.length);
 
-    for (i; i <= end; i++) {
-      if (i < 10) {
-        link = `${url.replace(query, `S${query.substring(1, 3)}E0${i}`)}`;
-      } else {
-        link = `${url.replace(query, `S${query.substring(1, 3)}E${i}`)}`;
+        urls.push({ fileName, link });
       }
-      const fileName = link.substring(link.lastIndexOf("/") + 1, link.length);
-
-      urls.push({ fileName, link });
     }
-
     this.setState({ urls });
-    console.log(urls);
   };
 
   renderUrls = () => {
     const { urls } = this.state;
-
     return (
       <List>
-        {urls
+        {Array.isArray(urls)
           ? urls.map(url => {
               const { link, fileName } = url;
               return (
@@ -74,32 +71,38 @@ export default class extends React.Component {
               );
             })
           : null}
-        {urls ? (
+        {Array.isArray(urls) ? (
           <Button
+            fluid
+            primary
             onClick={() => {
               this.downloadEpisodes(urls);
             }}
+            icon="download"
           >
+            {" "}
             Download all episodes
           </Button>
         ) : null}
       </List>
     );
   };
-  //auto download not yet working. to be solved
+
+  //auto download not yet working. //TODO
   downloadEpisodes(urls) {
     urls.forEach(url => {
-      // saveAs(url.link, url.fileName);
-      let link = document.createElement("a");
-      link.href = url.link;
-      link.target = "_blank";
-      link.setAttribute("_target", "blank");
-      link.download = url.fileName;
-      link.style.display = "block";
-      link.innerHTML = url.fileName;
-      document.body.appendChild(link);
-      link.click();
+      window.open(url.link);
     });
+
+    // saveAs(url.link, url.fileName);
+    // let link = document.createElement("a");
+    // link.href = url.link;
+    // link.target = "_blank";
+    // link.setAttribute("_target", "blank");
+    // link.download = url.fileName;
+    // link.style.display = "block";
+    // link.innerHTML = url.fileName;
+    // document.body.appendChild(link);
     // var evt = new MouseEvent("click", {
     // 	view: window,
     // 	bubbles: true,
@@ -114,11 +117,11 @@ export default class extends React.Component {
   renderDetails = e => {
     const { url, start, end, isSubmitting, disabled } = this.state;
     return (
-      <Container text style={{ marginTop: "100 auto" }}>
+      <Container style={{ marginTop: "100 auto" }}>
         <Header as="h1">Series Download</Header>
-        <Grid>
+        <Grid stackable columns={2}>
           <Grid.Row>
-            <Grid.Column width={10}>
+            <Grid.Column width={8}>
               <Form
                 onSubmit={() => {
                   this.handleDownload();
@@ -145,17 +148,19 @@ export default class extends React.Component {
                 />
 
                 <Button
+                  fluid
                   onClick={() => {
                     this.handleDownload();
                   }}
-                  disabled={url && start && end ? false : true}
+                  primary
+                  disabled={url && start && end && start < end ? false : true}
                 >
-                  Download
+                  Get episodes
                 </Button>
               </Form>
             </Grid.Column>
 
-            <Grid.Column width={4}>{this.renderUrls()}</Grid.Column>
+            <Grid.Column width={8}>{this.renderUrls()}</Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>
