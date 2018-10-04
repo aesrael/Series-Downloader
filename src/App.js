@@ -33,7 +33,7 @@ export default class extends React.Component {
     url = url.toString().trim();
     let urls = [];
     let link = "";
-    query = url.match(/S0\dE\d+/) && url.match(/S0\dE\d+/)[0];
+    query = url.match(/S(\d+)E(\d+)/) && url.match(/S(\d+)E(\d+)/)[0];
 
     let i = start;
     if (query) {
@@ -78,7 +78,6 @@ export default class extends React.Component {
             onClick={() => {
               this.downloadEpisodes(urls);
             }}
-            icon="download"
           >
             {" "}
             Download all episodes
