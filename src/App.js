@@ -55,7 +55,7 @@ export default class extends React.Component {
   renderUrls = () => {
     const { urls } = this.state;
     return (
-      <List>
+      <List ordered>
         {Array.isArray(urls)
           ? urls.map(url => {
               const { link, fileName } = url;
