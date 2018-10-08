@@ -7,7 +7,8 @@ import {
   Header,
   Grid,
   List,
-  Image
+  Image,
+  Icon
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
@@ -87,7 +88,6 @@ export default class extends React.Component {
     );
   };
 
-  //auto download not yet working. //TODO
   downloadEpisodes(urls) {
     urls.forEach(url => {
       let link = document.createElement("a");
@@ -99,7 +99,7 @@ export default class extends React.Component {
       document.body.appendChild(link);
       window.open(url.link);
     });
-
+    //auto download not yet working. //TODO
     // saveAs(url.link, url.fileName);
     // let link = document.createElement("a");
     // link.href = url.link;
@@ -126,7 +126,7 @@ export default class extends React.Component {
       <Container style={{ marginTop: "100 auto" }}>
         <Header as="h1">Series Download</Header>
         <Grid stackable columns={2}>
-          <Grid.Row>
+          <Grid.Row style={{ marginBottom: "100px" }}>
             <Grid.Column width={8}>
               <Form
                 onSubmit={() => {
@@ -167,6 +167,20 @@ export default class extends React.Component {
             </Grid.Column>
 
             <Grid.Column width={8}>{this.renderUrls()}</Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={16} style={{ textAlign: "center" }}>
+              <p>
+                with <Icon name="heart" /> by israeladura{" "}
+                <a href="https://twitter.com/aduraisrael">
+                  <Icon name="twitter" />{" "}
+                </a>
+                |{" "}
+                <a href="https://github/israeladura">
+                  <Icon name="github" />{" "}
+                </a>
+              </p>
+            </Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>
